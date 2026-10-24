@@ -1,7 +1,5 @@
-// lib/firebase.js
-import { initializeApp, getApps } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { initializeApp, getApps, getApp } from "firebase/app";
+import { getAuth } from "firebase/auth"; // استيراد خدمة التوثيق المطلوبة للتسجيل
 
 const firebaseConfig = {
   apiKey: "AIzaSyDaEvpvH2Gna68QWYIgSv8evzzutZHQE7I",
@@ -13,8 +11,8 @@ const firebaseConfig = {
   measurementId: "G-8NZDK31VJB"
 };
 
-// التقييم الصحيح لمنع تكرار التهيئة
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+// منع تكرار بناء التطبيق عند عمل تحديث تلقائي (Refresh) في Next.js
+const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
 
-export const db = getFirestore(app);
+// تصدير الـ auth لتقرأه صفحة التسجيل بشكل صحيح
 export const auth = getAuth(app);
